@@ -1,9 +1,10 @@
 package it.unicam.cs.pg.preprocessing;
 
+import it.unicam.cs.pg.modelDl4jTraining.ImagePreprocessor;
 import javafx.concurrent.Task;
 import org.datavec.image.loader.NativeImageLoader;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import it.unicam.cs.pg.modelDl4jTraining.ImagePreprocessor;
+
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler;
 import org.opencv.core.Mat;

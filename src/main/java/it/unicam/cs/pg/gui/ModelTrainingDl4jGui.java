@@ -293,9 +293,9 @@ public class ModelTrainingDl4jGui extends Application {
                 continue;
             }
             try {
-                INDArray input = loadWithImageIOFallback(originalFile, 3);
+                INDArray input = loadImageWithImageIO(originalFile, 3);
                 scaler.transform(input);
-                INDArray label = loadWithImageIOFallback(maskFile, 1);
+                INDArray label = loadImageWithImageIO(maskFile, 1);
                 scaler.transform(label);
                 datasets.add(new DataSet(input, label));
                 areaLog.appendText("[INFO] Coppia caricata: " + nomeFile + "\n");
@@ -329,7 +329,7 @@ public class ModelTrainingDl4jGui extends Application {
      * @return un array INDArray contenente i dati dell'immagine
      * @throws IOException se si verifica un errore durante il caricamento dell'immagine
      */
-    private INDArray loadWithImageIOFallback(File file, int channels) throws IOException {
+    private INDArray loadImageWithImageIO(File file, int channels) throws IOException {
         BufferedImage bf = ImageIO.read(file);
         if (bf == null) {
             throw new IOException("ImageIO non riconosce il file: " + file.getName());
