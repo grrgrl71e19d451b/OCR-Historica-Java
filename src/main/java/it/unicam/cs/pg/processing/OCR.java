@@ -56,16 +56,4 @@ public class OCR {
         return customTesseract.doOCR(ImageUtils.matToBufferedImage(image));
     }
 
-    /**
-     * Salva su file il risultato dell'elaborazione OCR.
-     *
-     * @param result Testo da salvare
-     * @param path Percorso completo del file di destinazione
-     * @throws IOException in caso di errori di scrittura del file
-     */
-    public static void saveOCRResult(String result, String path) throws IOException {
-        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(new File(path))) {
-            fos.write(result.getBytes());
-        }
-    }
 }

@@ -272,7 +272,6 @@ public class ProcessingTess4jGui extends Application {
      * Garantisce l'esistenza delle directory di output
      */
     private void creaDirectoryOutput() {
-        creaDirectory(PROJECT_ROOT + "\\output_images");
         creaDirectory(PROJECT_ROOT + "\\ocr-transcriptions\\standard-model");
         creaDirectory(PROJECT_ROOT + "\\ocr-transcriptions\\custom-model");
     }
@@ -339,7 +338,7 @@ public class ProcessingTess4jGui extends Application {
                     try {
                         Files.delete(file);
                     } catch (IOException e) {
-                        /* Gestione opzionale degli errori */
+
                     }
                 });
     }
