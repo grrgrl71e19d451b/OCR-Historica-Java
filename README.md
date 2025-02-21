@@ -94,42 +94,53 @@ La struttura del progetto è organizzata come segue:
 
 ```
 OCR-Historica-Java/
-├── gui/
-│   ├── ModelTrainerTess4jGui
-│   ├── ModelTrainerDl4jGui
-│   ├── OCRHistoricaJavaLauncher
-│   ├── PreprocessingDl4jGui
-│   ├── ProcessingTess4jGui
-│   ├── TextCorrectionGui
-│
-├── modelDl4jTraining/
-│   ├── BoxCleaner
-│   ├── BoxTextEditor
-│   ├── ModelArchitecture
-│   ├── ModelTrainingExecutor
-│
-├── modelTess4JTraining/
-│   ├── ImagePreprocessor
-│
-├── postprocessing/
-│   ├── TextCorrector
-│
-├── preprocessing/
-│   ├── ImageProcessingTask
-│   ├── ImageUtils
-│   ├── PreprocessingFilters
-│
-├── processing/
-│   ├── ImageSelectionWindow
-│   ├── OCR
-│
-├── resources/
-│
-├── test/
+├── src/
+│   ├── main/java/it/unicam/cs/pg/
+│   │   ├── gui/
+│   │   │   ├── ModelTrainerTess4jGui
+│   │   │   ├── ModelTrainerDl4jGui
+│   │   │   ├── OCRHistoricaJavaLauncher
+│   │   │   ├── PreprocessingDl4jGui
+│   │   │   ├── ProcessingTess4jGui
+│   │   │   ├── TextCorrectionGui
+│   │   │
+│   │   ├── modelDl4jTraining/
+│   │   │   ├── ImagePreprocessor
+│   │   │   ├── ModelArchitecture
+│   │   │
+│   │   ├── modelTess4JTraining/
+│   │   │   ├── BoxCleaner
+│   │   │   ├── BoxTextEditor
+│   │   │   ├── ModelTrainingExecutor
+│   │   │
+│   │   ├── postprocessing/
+│   │   │   ├── TextCorrector
+│   │   │
+│   │   ├── preprocessing/
+│   │   │   ├── ImageProcessingTask
+│   │   │   ├── PreprocessingFilters
+│   │   │
+│   │   ├── processing/
+│   │   │   ├── ImageSelectionWindow
+│   │   │   ├── ImageUtils
+│   │   │   ├── OCR
+│   │   │
+├── tess4j dataset/
+├── tess4j model/
+├── tess4j training/
+├── dl4j dataset/
+├── dl4j model/
+├── historical_documents/
+├── ocr-transcriptions/
+├── output_images/
+├── .gitignore
+├── LICENSE
+├── README.md
+├── pom.xml
+
 ```
 
-**Nota**: Ogni modulo dell'interfaccia grafica presente nella cartella `gui/` è associato a una sottocartella contenente le classi ausiliari specifiche per quel modulo. Alcune di queste classi ausiliari sono condivise tra diversi moduli dell'interfaccia per promuovere la modularità e il riutilizzo del codice.
-
+**Nota**: Ogni modulo dell'interfaccia grafica nella cartella gui/ ha una sottocartella con classi ausiliari specifiche, alcune delle quali sono condivise tra più moduli per favorire modularità e riutilizzo del codice. Il progetto include anche cartelle per i dati e i modelli, come tess4j dataset/, dl4j dataset/, tess4j model/ e dl4j model/, nonché per i documenti storici (historical_documents/) e le trascrizioni OCR (ocr-transcriptions/). Le immagini preprocessate e i risultati finali sono salvati in output_images/.
 ## Librerie Esterne Utilizzate
 
 Di seguito sono elencate le principali librerie esterne utilizzate nel progetto:
