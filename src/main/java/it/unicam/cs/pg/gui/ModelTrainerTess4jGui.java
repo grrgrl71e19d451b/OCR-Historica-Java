@@ -26,7 +26,10 @@ import java.nio.file.StandardCopyOption;
  * Implementa l'interfaccia ModelTrainingLogger per gestire i log durante il processo di addestramento.
  */
 public class ModelTrainerTess4jGui extends Application implements ModelTrainingExecutor.ModelTrainingLogger {
-
+    static {
+        // Carica la libreria nativa di OpenCV
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     private static final String PROJECT_ROOT = System.getProperty("user.dir"); // Ottieni la root del progetto
     private String selectedImagePath;
@@ -125,9 +128,9 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
      */
     private void initializeDirectories() {
         String[] directories = {
-                PROJECT_ROOT + "\\dataset",
-                PROJECT_ROOT + "\\training",
-                PROJECT_ROOT + "\\models"
+                PROJECT_ROOT + "\\tess4j dataset",
+                PROJECT_ROOT + "\\tess4j training",
+                PROJECT_ROOT + "\\tess4j model"
         };
         for (String dirPath : directories) {
             File dir = new File(dirPath);
@@ -225,7 +228,7 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
      * @param logArea      Area di testo per i log.
      */
     private void copyImageToDataset(File selectedFile, TextArea logArea) {
-        String outputDirectory = PROJECT_ROOT + "\\dataset";
+        String outputDirectory = PROJECT_ROOT + "\\tess4j dataset";
         File directory = new File(outputDirectory);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -248,7 +251,7 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
      * @throws IOException Errore durante la generazione del file.
      */
     private void generateBoxFile(String imagePath) throws IOException {
-        String outputDirectory = PROJECT_ROOT + "\\dataset";
+        String outputDirectory = PROJECT_ROOT + "\\tess4j dataset";
         File directory = new File(outputDirectory);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -275,7 +278,7 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
                 !imagePath.toLowerCase().endsWith(".png")) {
             throw new IOException("Formato file non supportato. Usa .tif, .tiff o .png.");
         }
-        String outputDirectory = PROJECT_ROOT + "\\dataset";
+        String outputDirectory = PROJECT_ROOT + "\\tess4j dataset";
         File directory = new File(outputDirectory);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -295,13 +298,13 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
      * @throws IOException Errore durante la creazione del file.
      */
     private void createTrainListFile() throws IOException {
-        String generatedFilesDirectory = PROJECT_ROOT + "\\dataset";
+        String generatedFilesDirectory = PROJECT_ROOT + "\\tess4j dataset";
         File directory = new File(generatedFilesDirectory);
         if (!directory.exists()) {
             throw new IOException("Directory " + generatedFilesDirectory + " does not exist.");
         }
 
-        String trainingDirectory = PROJECT_ROOT + "\\training";
+        String trainingDirectory = PROJECT_ROOT + "\\tess4j training";
         File trainingDir = new File(trainingDirectory);
         if (!trainingDir.exists()) {
             trainingDir.mkdirs();
@@ -324,34 +327,79 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
         System.out.println("train_listfile.txt created at: " + trainListFilePath);
     }
 
+
     /**
-     * Finalizza il modello addestrato.
+     * Finalizza il modello addestrato permettendo di selezionare i file .checkpoint e .traineddata tramite GUI.
      *
-     * @throws IOException Errore durante la finalizzazione.
+     * @throws IOException        Errore durante la finalizzazione.
+     * @throws InterruptedException Errore nell'esecuzione del processo.
      */
     private void finalizeModel() throws IOException, InterruptedException {
         String checkpointPath = selectCheckpointFile();
         if (checkpointPath == null) {
+            System.err.println("Errore: Nessun file .checkpoint selezionato.");
             return;
         }
 
-        String trainingDirectory = PROJECT_ROOT + "\\training";
-        String traineddataPath = trainingDirectory + File.separator + "ita.traineddata";
-        String modelName = "model_" + System.currentTimeMillis() + ".traineddata";
-        String modelOutputPath = PROJECT_ROOT + "\\models\\" + modelName;
+        String trainedDataPath = selectTrainedDataFile();
+        if (trainedDataPath == null) {
+            System.err.println("Errore: Nessun file .traineddata selezionato.");
+            return;
+        }
 
-        File outputDir = new File(PROJECT_ROOT + "\\models");
+        String modelName = "model_" + System.currentTimeMillis() + ".traineddata";
+        String modelOutputPath = PROJECT_ROOT + "\\tess4j model\\" + modelName;
+
+        File outputDir = new File(PROJECT_ROOT + "\\tess4j model");
         if (!outputDir.exists()) {
             outputDir.mkdirs();
         }
 
-        String command = "lstmtraining --stop_training --continue_from " + checkpointPath +
-                " --traineddata " + traineddataPath +
-                " --model_output " + modelOutputPath;
+        // Costruzione del comando con i percorsi tra virgolette per gestire gli spazi
+        String command = "lstmtraining --stop_training" +
+                " --continue_from \"" + checkpointPath + "\"" +
+                " --traineddata \"" + trainedDataPath + "\"" +
+                " --old_traineddata \"" + trainedDataPath + "\"" +
+                " --model_output \"" + modelOutputPath + "\"";
+
+        System.out.println("Eseguendo comando: " + command);
 
         ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", command);
         processBuilder.redirectErrorStream(true);
-        executeProcess(processBuilder, modelOutputPath, "Modello finalizzato con successo.");
+
+        // Eseguire il processo e catturare l'output
+        Process process = processBuilder.start();
+        int exitCode = process.waitFor();
+
+        if (exitCode != 0) {
+            System.err.println("Errore durante la finalizzazione del modello. Controllare i file selezionati.");
+            System.err.println("Possibili cause:");
+            System.err.println("- Il file .traineddata è incompatibile con il .checkpoint");
+            System.err.println("- Il file .traineddata selezionato non è quello usato per l'addestramento iniziale");
+            System.err.println("- Il percorso dei file contiene caratteri non supportati");
+            return;
+        }
+
+        System.out.println("Modello finalizzato con successo.");
+    }
+
+    /**
+     * Seleziona un file .traineddata per la finalizzazione del modello, utilizzando un FileChooser.
+     *
+     * @return Percorso del file .traineddata selezionato.
+     */
+    private String selectTrainedDataFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(PROJECT_ROOT + "\\tess4j training"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Traineddata Files", "*.traineddata"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null && selectedFile.getName().endsWith(".traineddata")) {
+            return selectedFile.getAbsolutePath();
+        } else {
+            System.out.println("Errore: Selezionare un file .traineddata valido.");
+            return null;
+        }
     }
 
     /**
@@ -378,14 +426,14 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
      * @throws IOException Errore durante la cancellazione dei file.
      */
     private void clearOutput() throws IOException {
-        String datasetDirectory = PROJECT_ROOT + "\\dataset";
+        String datasetDirectory = PROJECT_ROOT + "\\tess4j dataset";
         File datasetDir = new File(datasetDirectory);
         if (datasetDir.exists() && datasetDir.isDirectory()) {
             deleteFilesInDirectory(datasetDir);
             System.out.println("Tutti i file in " + datasetDirectory + " sono stati eliminati.");
         }
 
-        String trainingDirectory = PROJECT_ROOT + "\\training";
+        String trainingDirectory = PROJECT_ROOT + "\\tess4j training";
         File trainingDir = new File(trainingDirectory);
         if (trainingDir.exists() && trainingDir.isDirectory()) {
             deleteFilesWithExtension(trainingDir, ".checkpoint");
@@ -645,7 +693,7 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
      */
     private String getBoxFilePath(String imagePath) {
         String fileName = new File(imagePath).getName().replaceFirst("[.][^.]+$", "");
-        return PROJECT_ROOT + "\\dataset\\" + fileName + ".box";
+        return PROJECT_ROOT + "\\tess4j dataset\\" + fileName + ".box";
     }
 
     /**

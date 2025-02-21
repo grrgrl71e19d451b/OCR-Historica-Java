@@ -36,7 +36,7 @@ import java.util.List;
  * Applicazione GUI per il training di un modello DL4J per la rimozione di sfondo e rumore.
  * Gestisce la preparazione del dataset (processamento immagini), l’addestramento e il salvataggio del modello.
  */
-public class ModelTrainingDl4jGui extends Application {
+public class ModelTrainerDl4jGui extends Application {
     static {
         // Carica la libreria nativa di OpenCV
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

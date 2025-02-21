@@ -127,7 +127,7 @@ public class OCRHistoricaJavaLauncher extends Application {
         });
 
         modelTrainerButton.setOnAction(e -> {
-            ModelTrainingDl4jGui trainingDl4jGUI = new ModelTrainingDl4jGui();
+            ModelTrainerDl4jGui trainingDl4jGUI = new ModelTrainerDl4jGui();
             trainingDl4jGUI.start(new Stage());
         });
 

@@ -90,7 +90,7 @@ La struttura del progetto è organizzata come segue:
 OCR-Historica-Java/
 ├── gui/
 │   ├── ModelTrainerTess4jGui
-│   ├── ModelTrainingDl4jGui
+│   ├── ModelTrainerDl4jGui
 │   ├── OCRHistoricaJavaLauncher
 │   ├── PreprocessingDl4jGui
 │   ├── ProcessingTess4jGui

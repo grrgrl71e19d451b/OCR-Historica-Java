@@ -43,7 +43,7 @@ public class ModelTrainingExecutor {
         validateInputFiles();
 
         // Path di output per il modello addestrato
-        String modelOutputPath = projectRoot + File.separator + "training" + File.separator + "output_model";
+        String modelOutputPath = projectRoot + File.separator + "tess4j training" + File.separator + "output_model";
 
         Process process = buildTrainingProcess(modelOutputPath, maxIterazioni);
         executeProcess(process);
@@ -56,7 +56,7 @@ public class ModelTrainingExecutor {
     private void validateInputFiles() throws IOException {
         checkFileExists(trainedDataPath, "File traineddata");
         checkFileExists(lstmModelPath, "File LSTM");
-        checkFileExists(projectRoot + File.separator + "training" + File.separator + "train_listfile.txt", "Train listfile");
+        checkFileExists(projectRoot + File.separator + "tess4j training" + File.separator + "train_listfile.txt", "Train listfile");
     }
 
     /**
@@ -76,7 +76,7 @@ public class ModelTrainingExecutor {
         String command = String.format(
                 "lstmtraining --traineddata \"%s\" --train_listfile \"%s\" --model_output \"%s\" --continue_from \"%s\" --max_iterations %d",
                 trainedDataPath,
-                projectRoot + File.separator + "training" + File.separator + "train_listfile.txt",
+                projectRoot + File.separator + "tess4j training" + File.separator + "train_listfile.txt",
                 modelOutputPath,
                 lstmModelPath,
                 maxIterazioni
