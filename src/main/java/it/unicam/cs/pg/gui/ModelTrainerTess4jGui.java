@@ -26,10 +26,6 @@ import java.nio.file.StandardCopyOption;
  * Implementa l'interfaccia ModelTrainingLogger per gestire i log durante il processo di addestramento.
  */
 public class ModelTrainerTess4jGui extends Application implements ModelTrainingExecutor.ModelTrainingLogger {
-    static {
-        // Carica la libreria nativa di OpenCV
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
 
     private static final String PROJECT_ROOT = System.getProperty("user.dir"); // Ottieni la root del progetto
     private String selectedImagePath;

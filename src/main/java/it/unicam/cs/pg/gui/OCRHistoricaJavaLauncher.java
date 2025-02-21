@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.opencv.core.Core;
 
 /**
  * Classe principale che rappresenta il launcher dell'applicazione OCR-Historica-Java.
@@ -18,6 +19,14 @@ import javafx.stage.Stage;
  * per selezionare e avviare diversi moduli dell'applicazione.
  */
 public class OCRHistoricaJavaLauncher extends Application {
+
+    static {
+        /**
+         * Carica la libreria nativa di OpenCV necessaria per le operazioni
+         * di elaborazione delle immagini.
+         */
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     /**
      * Metodo principale per l'avvio dell'applicazione.

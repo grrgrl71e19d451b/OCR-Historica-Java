@@ -37,10 +37,7 @@ import java.util.List;
  * Gestisce la preparazione del dataset (processamento immagini), l’addestramento e il salvataggio del modello.
  */
 public class ModelTrainerDl4jGui extends Application {
-    static {
-        // Carica la libreria nativa di OpenCV
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
+
     private static final String PROJECT_ROOT = System.getProperty("user.dir");
     private static final String DATASET_DIR = PROJECT_ROOT + File.separator + "dl4j dataset";
     private static final String PATH_ORIGINALI = DATASET_DIR + File.separator + "originali";

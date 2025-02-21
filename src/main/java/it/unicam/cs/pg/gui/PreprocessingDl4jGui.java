@@ -29,7 +29,7 @@ import java.io.File;
 public class PreprocessingDl4jGui extends Application {
 
     private static final String PROJECT_ROOT = System.getProperty("user.dir");
-    private static final String OUTPUT_NO_FILTER_DIR = "C:\\OCR-Historica-Java\\output_images\\background-rumor-remove";
+    private static final String OUTPUT_NO_FILTER_DIR = PROJECT_ROOT + File.separator + "output_images" + File.separator + "background-rumor-remove";
 
     private TextArea areaLog;
     private ComboBox<String> processingTypeComboBox;
