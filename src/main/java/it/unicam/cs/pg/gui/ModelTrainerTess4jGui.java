@@ -274,19 +274,40 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
                 !imagePath.toLowerCase().endsWith(".png")) {
             throw new IOException("Formato file non supportato. Usa .tif, .tiff o .png.");
         }
-        String outputDirectory = PROJECT_ROOT + "\\tess4j dataset";
+
+        // Percorso della cartella di output con spazio nel nome
+        String outputDirectory = PROJECT_ROOT + File.separator + "tess4j dataset";
         File directory = new File(outputDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new IOException("Impossibile creare la directory di output: " + outputDirectory);
         }
-        String fileName = new File(imagePath).getName().replaceFirst("[.][^.]+$", "");
+
+        File imageFile = new File(imagePath);
+        if (!imageFile.exists()) {
+            throw new IOException("Il file immagine non esiste: " + imagePath);
+        }
+
+        String fileName = imageFile.getName().replaceFirst("[.][^.]+$", "");
         String lstmfFilePath = outputDirectory + File.separator + fileName + ".lstmf";
 
-        String command = "tesseract " + imagePath + " " + outputDirectory + File.separator + fileName + " --psm 6 wordstrbox lstm.train";
+        // Creazione del comando con virgolette per gestire i percorsi con spazi
+        String command = String.format(
+                "tesseract \"%s\" \"%s\" --psm 6 wordstrbox lstm.train",
+                imageFile.getAbsolutePath(),
+                outputDirectory + File.separator + fileName
+        );
+
         ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", command);
         processBuilder.redirectErrorStream(true);
         executeProcess(processBuilder, lstmfFilePath, "File .lstmf generato con successo.");
+
+        // Verifica se il file .lstmf è stato effettivamente creato
+        File lstmfFile = new File(lstmfFilePath);
+        if (!lstmfFile.exists()) {
+            throw new IOException("Errore: il file .lstmf non è stato generato correttamente.");
+        }
     }
+
 
     /**
      * Crea il file train_listfile.txt contenente i percorsi dei file .lstmf.
