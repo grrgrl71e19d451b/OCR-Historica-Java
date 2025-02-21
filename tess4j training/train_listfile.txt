@@ -1,0 +1,2 @@
+C:/OCR-Historica-Java/tess4j dataset/Petrarca_Rerum_Vulgarium_Fragmenta-1l.lstmf
+C:/OCR-Historica-Java/tess4j dataset/Petrarca_Rerum_Vulgarium_Fragmenta-1r.lstmf
