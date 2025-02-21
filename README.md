@@ -26,6 +26,12 @@ Il progetto OCR-Historica-Java è stato sviluppato per facilitare l'estrazione d
 - Integrazione con Tess4J per il riconoscimento ottico dei caratteri.
 - Modelli di apprendimento automatico basati su DeepLearning4j per migliorare l'accuratezza dell'OCR.
 
+## Limiti dei Dataset
+
+I dataset presenti in questo repository sono **campioni rappresentativi** dei dati utilizzati per l'addestramento dei modelli OCR. Per motivi di dimensione, sono stati caricati solo un numero limitato di file, ma il dataset completo è stato utilizzato per il training e la validazione dei modelli. I dati completi sono disponibili **localmente**.
+
+Questa versione ridotta è inclusa nel repository solo per scopi di dimostrazione e test.
+
 ## Requisiti di Sistema
 
 Prima di iniziare, assicurati di soddisfare i seguenti requisiti:
