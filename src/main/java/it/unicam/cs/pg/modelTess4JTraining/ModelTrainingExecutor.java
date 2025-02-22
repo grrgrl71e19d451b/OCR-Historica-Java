@@ -13,27 +13,23 @@ public class ModelTrainingExecutor {
     private final String trainedDataPath;
     private final String lstmModelPath;
     private final String projectRoot;
-    private final ModelTrainingLogger logger;
 
     /**
      * Costruttore per l'executor del training
+     *
      * @param projectRoot Percorso radice del progetto
      * @param trainedDataPath Percorso al file .traineddata
      * @param lstmModelPath Percorso al modello LSTM iniziale
-     * @param logger Logger per tracciare l'avanzamento
      */
-    public ModelTrainingExecutor(String projectRoot,
-                                 String trainedDataPath,
-                                 String lstmModelPath,
-                                 ModelTrainingLogger logger) {
+    public ModelTrainingExecutor(String projectRoot, String trainedDataPath, String lstmModelPath) {
         this.projectRoot = projectRoot;
         this.trainedDataPath = trainedDataPath;
         this.lstmModelPath = lstmModelPath;
-        this.logger = logger;
     }
 
     /**
      * Avvia il processo di addestramento del modello
+     *
      * @param maxIterazioni Numero massimo di iterazioni per il training
      * @throws IOException In caso di errori I/O o file mancanti
      * @throws InterruptedException Se il processo viene interrotto
@@ -47,7 +43,8 @@ public class ModelTrainingExecutor {
 
         Process process = buildTrainingProcess(modelOutputPath, maxIterazioni);
         executeProcess(process);
-        logger.logSuccess("Addestramento completato con successo");
+
+        logSuccess("Addestramento completato con successo");
     }
 
     /**
@@ -81,7 +78,8 @@ public class ModelTrainingExecutor {
                 lstmModelPath,
                 maxIterazioni
         );
-        logger.logDebug("Esecuzione comando training: " + command);
+
+        logDebug("Esecuzione comando training: " + command);
 
         // Avvio processo con redirect degli errori sullo stdout
         return new ProcessBuilder("cmd.exe", "/c", command)
@@ -97,7 +95,7 @@ public class ModelTrainingExecutor {
             String line;
             // Lettura continua dell'output del processo
             while ((line = reader.readLine()) != null) {
-                logger.logProcessOutput(line);
+                logProcessOutput(line);
             }
         }
 
@@ -109,11 +107,29 @@ public class ModelTrainingExecutor {
     }
 
     /**
-     * Interfaccia per il logging degli eventi durante il training
+     * Logga un messaggio di successo.
+     *
+     * @param message Messaggio da loggare.
      */
-    public interface ModelTrainingLogger {
-        void logSuccess(String message);
-        void logDebug(String debugInfo);
-        void logProcessOutput(String line);
+    private void logSuccess(String message) {
+        System.out.println("[SUCCESS]: " + message);
+    }
+
+    /**
+     * Logga un messaggio di debug.
+     *
+     * @param debugInfo Informazioni di debug da loggare.
+     */
+    private void logDebug(String debugInfo) {
+        System.out.println("[DEBUG]: " + debugInfo);
+    }
+
+    /**
+     * Logga l'output di un processo.
+     *
+     * @param line Linea di output del processo.
+     */
+    private void logProcessOutput(String line) {
+        System.out.println("[PROCESS]: " + line);
     }
 }

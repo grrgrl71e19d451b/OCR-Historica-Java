@@ -25,7 +25,7 @@ import java.nio.file.StandardCopyOption;
  * Classe principale per l'interfaccia grafica dell'applicazione di addestramento del modello Tesseract.
  * Implementa l'interfaccia ModelTrainingLogger per gestire i log durante il processo di addestramento.
  */
-public class ModelTrainerTess4jGui extends Application implements ModelTrainingExecutor.ModelTrainingLogger {
+public class ModelTrainerTess4jGui extends Application {
 
     private static final String PROJECT_ROOT = System.getProperty("user.dir"); // Ottieni la root del progetto
     private String selectedImagePath;
@@ -376,7 +376,6 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
         String command = "lstmtraining --stop_training" +
                 " --continue_from \"" + checkpointPath + "\"" +
                 " --traineddata \"" + trainedDataPath + "\"" +
-                " --old_traineddata \"" + trainedDataPath + "\"" +
                 " --model_output \"" + modelOutputPath + "\"";
 
         System.out.println("Eseguendo comando: " + command);
@@ -653,8 +652,7 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
         ModelTrainingExecutor executor = new ModelTrainingExecutor(
                 PROJECT_ROOT,
                 traineddataFile.getAbsolutePath(),
-                lstmFile.getAbsolutePath(),
-                this
+                lstmFile.getAbsolutePath()
         );
         Task<Void> trainingTask = new Task<>() {
             @Override
@@ -713,33 +711,4 @@ public class ModelTrainerTess4jGui extends Application implements ModelTrainingE
         return PROJECT_ROOT + "\\tess4j dataset\\" + fileName + ".box";
     }
 
-    /**
-     * Logga un messaggio di successo.
-     *
-     * @param message Messaggio da loggare.
-     */
-    @Override
-    public void logSuccess(String message) {
-        System.out.println("[SUCCESS]: " + message);
-    }
-
-    /**
-     * Logga un messaggio di debug.
-     *
-     * @param debugInfo Informazioni di debug da loggare.
-     */
-    @Override
-    public void logDebug(String debugInfo) {
-        System.out.println("[DEBUG]: " + debugInfo);
-    }
-
-    /**
-     * Logga l'output di un processo.
-     *
-     * @param line Linea di output del processo.
-     */
-    @Override
-    public void logProcessOutput(String line) {
-        System.out.println("[PROCESS]: " + line);
-    }
 }
